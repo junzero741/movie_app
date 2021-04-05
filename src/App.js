@@ -1,38 +1,51 @@
 import React, { useState } from 'react';
+import Movie from './Movie';
 import PropTypes from 'prop-types';
 
 
-class App extends React.Component{
-  
+class App extends React.Component {
+
   state = {
-    count : 0
+    isLoading: true,
+    movies: []
   };
 
-  add = () => {
-    console.log("add");
-    this.setState(current => ({count : ++current.count}));    // setState를 호출할 때마다 리액트는 자동으로 render 함수를 실행시키게 되어있다.
-  }
-  
-  minus = () => {
-    console.log('minus');
-    this.setState(current => ({count : --current.count}));
+
+  componentDidMount() {
+    this.getMovies();
   }
 
-  componentDidMount(){
-    console.log("components mounted");
-  }
-
-  componentDidUpdate(){
+  componentDidUpdate() {
     console.log("components updated");
   }
 
+  getMovies = () => {
+    const url = "https://yts.mx/api/v2/list_movies.json"
+    fetch(url)
+      .then(result => result.json())
+      .then(result => {
+        const movies = result.data.movies;
+        console.log(movies);
+        return movies;
+      })
+      .then(result => this.setState({ movies: result, isLoading: false }));
+  }
+
+
+
   render() {
-    console.log('components rendering');
-    return(
+    const { isLoading, movies } = this.state;
+    return (
       <div>
-        <h1>The number is {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
+        {isLoading ? "Loading..." : movies.map(movie => {
+          return <Movie
+            id={movie.id}
+            year={movie.year}
+            title={movie.title}
+            summary={movie.summary}
+            poster={movie.medium_cover_image}
+            rating={movie.rating} />
+        })}
       </div>
     )
   }
