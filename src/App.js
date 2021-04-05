@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Movie from './Movie';
-import PropTypes from 'prop-types';
+import './App.css';
 
 
 class App extends React.Component {
@@ -25,7 +25,6 @@ class App extends React.Component {
       .then(result => result.json())
       .then(result => {
         const movies = result.data.movies;
-        console.log(movies);
         return movies;
       })
       .then(result => this.setState({ movies: result, isLoading: false }));
@@ -39,6 +38,7 @@ class App extends React.Component {
       <div>
         {isLoading ? "Loading..." : movies.map(movie => {
           return <Movie
+            key = {movie.id}
             id={movie.id}
             year={movie.year}
             title={movie.title}

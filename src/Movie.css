@@ -1,0 +1,11 @@
+.title {
+    font-size: 40px;
+}
+
+.year {
+    color: gray;
+}
+
+.content {
+    display: flex;
+}
